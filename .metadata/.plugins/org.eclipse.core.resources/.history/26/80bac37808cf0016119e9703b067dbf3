@@ -1,0 +1,52 @@
+package com.fil.enrolmentapp.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.fil.enrolmentapp.beans.Role;
+import com.fil.enrolmentapp.manager.AppDBConnectionMgr;
+
+public class RoleDAO {
+	
+	private int idrole;
+	private String role;
+	private String desc;
+	
+	public RoleDAO() {
+		
+		idrole = 0;
+		role = "";
+		desc = "";
+	}
+	
+	public Role getRoleById(int roleid) {
+		
+		Role role = new Role();
+		String roleSQL = "select role from enrolmentapp.role where idrole=1";
+		AppDBConnectionMgr mgr = AppDBConnectionMgr.getInstance();
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = mgr.getConnection();
+			stmt = con.prepareStatement(roleSQL);
+			rs = stmt.executeQuery(roleSQL);
+			if(rs.next()) {
+				role.setIdrole(rs.getInt("idrole"));
+				role.setRole(rs.getString("role"));
+				role.setDesc(rs.getString("desc"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			mgr.closeConnection(con);
+		}
+		
+		return role;
+	}
+
+}

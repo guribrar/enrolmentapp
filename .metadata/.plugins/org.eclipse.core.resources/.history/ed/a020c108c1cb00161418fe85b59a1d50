@@ -1,0 +1,36 @@
+package com.fil.enrolmentapp.dao;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class TestConnectionPool {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		AppDBConnectionPool connectionPool = AppDBConnectionPool.getInstance();
+		Connection conn = connectionPool.getConnection();
+		try {
+			
+			Statement statement = conn.createStatement();
+			String query = "select * from user";
+			ResultSet resultSet = statement.executeQuery(query);
+			
+			while(resultSet.next()) {
+				
+				System.out.println(resultSet.getString(1) + resultSet.getString(2) + resultSet.getString(3));
+			}
+			
+		} catch(SQLException e) {
+			
+			e.printStackTrace();
+			
+		} finally {
+			connectionPool.closeConnection();
+		}
+		
+	}
+
+}

@@ -1,0 +1,70 @@
+package com.fil.enrolmentapp.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.fil.enrolmentapp.beans.Role;
+import com.fil.enrolmentapp.beans.User;
+import com.fil.enrolmentapp.dao.RoleDAO;
+import com.fil.enrolmentapp.dao.UserDAO;
+
+
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    public LoginServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String rolename = request.getParameter("role");
+		
+		System.out.println("Request Username = "+username);
+		System.out.println("Request Password = "+password);
+		System.out.println("Request Role = "+rolename);
+		
+		UserDAO userDAO = new UserDAO();
+		User user = userDAO.getUserByUsername(username);
+		String dbusername = user.getUsername();
+		int dbroleid = user.getRoleid();
+		
+		System.out.println("DB Username = "+dbusername);
+		System.out.println("DB Roleid = "+dbroleid);
+		
+		RoleDAO roleDAO = new RoleDAO();
+		Role role = null;
+		role = roleDAO.getRoleById(dbroleid);
+		String dbrolename = role.getRole();
+		System.out.println("DB Role name = "+dbroleid);
+		
+		if(username.equalsIgnoreCase(dbusername)) {
+			if(password.equalsIgnoreCase(dbpassword)) {
+				if(rolename.equalsIgnoreCase(dbrolename)) {
+					//Login success
+					request.getRequestDispatcher("/testingpage.jsp").forward(request, response);
+				} else {
+					request.setAttribute("error_code", 200);
+					request.getRequestDispatcher("/login.jsp").forward(request, response);
+				}
+				
+			} else {
+				request.setAttribute("error_code", 100);
+				request.getRequestDispatcher("/login.jsp").forward(request, response);
+			}
+		} else {
+			request.setAttribute("errorcode", 100);
+			request.getRequestDispatcher("/testingpage.jsp").forward(request, response);
+		}
+	}
+
+}

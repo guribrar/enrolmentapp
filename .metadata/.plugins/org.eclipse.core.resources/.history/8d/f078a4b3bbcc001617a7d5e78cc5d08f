@@ -1,0 +1,43 @@
+package com.fil.enrolmentapp.manager;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+public class AppDBConnectionMgr {
+
+	private DataSource dataSource;
+	private Connection connection;
+	
+	public Connection getConnection() {
+		
+		try {
+			
+			Context initContext = new InitialContext();
+			Context envContext = (Context)initContext.lookup("java:/comp/env");
+			dataSource = (DataSource)envContext.lookup("jdbc/enrolmentapp");
+			connection = dataSource.getConnection();
+					
+		} catch(NamingException e) {
+			
+			e.printStackTrace();
+		} catch(SQLException se) {
+			se.printStackTrace();
+		}
+		return connection;
+	}
+	
+	public void closeConnection(Connection con) {
+		
+		try {
+			con.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+}

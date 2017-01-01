@@ -1,0 +1,71 @@
+package com.fil.enrolmentapp.dao;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+public class AppDBConnectionPool {
+	
+	private static DataSource dataSource;
+	private static Connection connection;
+	private AppDBConnectionPool connectionPool;
+	
+	private AppDBConnectionPool() {
+		
+		dataSource = null;
+		connection = null;
+	}
+	
+	private static DataSource getDataSource() {
+		
+		try {
+			
+			Context initContext = new InitialContext();
+			Context envContext = (Context)initContext.lookup("java:/comp/env");
+			dataSource = (DataSource)envContext.lookup("jdbc/enrolmentapp");
+			
+		} catch(NamingException e) {
+			e.printStackTrace();
+		}
+		return dataSource;
+	}
+	
+	private static Connection getConnection() {
+		
+		try {
+			
+			dataSource = getDataSource();
+			connection = dataSource.getConnection();
+			
+		} catch(SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return connection;
+	}
+	
+	private static void closeConnection() {
+		
+		try {
+			
+			if(connection!=null) {
+				connection.close();
+			}
+			
+		} catch(SQLException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	public static AppDBConnectionPool getInstance() {
+		AppDBConnectionPool connectionPool = new AppDBConnectionPool();
+		return connectionPool;
+	}
+
+}

@@ -1,0 +1,5 @@
+package com.fil.enrolmentapp.beans;
+
+public class Release {
+
+}

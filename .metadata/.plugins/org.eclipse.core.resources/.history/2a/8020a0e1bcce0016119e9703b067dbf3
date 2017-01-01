@@ -1,0 +1,58 @@
+package com.fil.enrolmentapp.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.fil.enrolmentapp.dao.UserDAO;
+
+
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    public LoginServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String role = request.getParameter("role");
+		
+		UserDAO userDAO = new UserDAO();
+		String dbusername = userDAO.getUserByUsername(username).getUsername();
+		String dbpassword = userDAO.getUserByUsername(username).getPassword();
+		int dbroleid = userDAO.getUserByUsername(username).getRoleid();
+		
+		System.out.println("Username = "+username);
+		System.out.println("Password = "+password);
+		System.out.println("Role = "+role);
+		
+		if(username.equalsIgnoreCase(dbusername)) {
+			if(password.equalsIgnoreCase(dbpassword)) {
+				if(role.equalsIgnoreCase("Release Manager")) {
+					//Login success
+					request.getRequestDispatcher("/testingpage.jsp").forward(request, response);
+				} else {
+					request.setAttribute("error_code", 200);
+					request.getRequestDispatcher("/login.jsp").forward(request, response);
+				}
+				
+			} else {
+				request.setAttribute("error_code", 100);
+				request.getRequestDispatcher("/login.jsp").forward(request, response);
+			}
+		} else {
+			request.setAttribute("errorcode", 100);
+			request.getRequestDispatcher("/testingpage.jsp").forward(request, response);
+		}
+	}
+
+}
