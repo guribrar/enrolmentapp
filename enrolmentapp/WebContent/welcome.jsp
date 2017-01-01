@@ -43,6 +43,7 @@
   This tool is released to facilitate the project teams to align and plan their releases based on the published release calendar.
   Project Managers are required to enroll their projects in this tool so that the EM & RI team can plan the implementation part of it
   collaborating with different platforms and stakeholders.
+  Please keep sending me the feedback as you start using the tool.
      
 </article>
 
