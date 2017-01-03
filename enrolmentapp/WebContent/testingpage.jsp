@@ -16,7 +16,7 @@
 <title>Testing - User List</title>
 </head>
 <body>
-<font color="green"><b>List of Registered Users</b></font>
+<font color="green"><b>List of Registered Users shown below</b></font>
 <table frame="box" border="1">
 	<tr>
 		<th>Username</th>
